@@ -279,10 +279,9 @@ export default function MessagePage() {
   //filtering888***********************************************************
   const [prior, setPrior] = useState("0");
   const [filteredMessages, setFilteredMessages] = useState(allMessage);
-  const [priorisOpen, setPriorIsOpen] = useState(false);
 
-  const handlePriorChange = (value) => {
-    const selectedPrior = value;
+  const handlePriorChange = (event) => {
+    const selectedPrior = event.target.value;
     setPrior(selectedPrior);
 
     if (selectedPrior === "0") {
@@ -291,10 +290,8 @@ export default function MessagePage() {
       const filtered = allMessage.filter(
         (msg) => msg.importance === parseInt(selectedPrior)
       );
-      console.log('filtered',filtered);
       setFilteredMessages(filtered);
     }
-    setPriorIsOpen(false);
   };
 
   //*************************************************************************** */
@@ -363,7 +360,6 @@ export default function MessagePage() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-
   function handleLanguageChange1(value) {
     setSelectedLanguage(value);
     setIsOpen(false); // Close dropdown after selection
@@ -374,11 +370,6 @@ export default function MessagePage() {
     { value: "hi", label: "ह" },
     { value: "ta", label: "தெ" },
     { value: "te", label: "తె" },
-  ];
-  const prior_options = [
-    { value: "2", label: "Red" },
-    { value: "1", label: "Yello" },
-    { value: "0", label: "Na" },
   ];
 
 
@@ -409,48 +400,7 @@ export default function MessagePage() {
 
         <div className='flex gap-2'>
 
-          {/* msg prior dropdown */}
-
-        <div className="relative inline-block">
-  {/* Dropdown button */}
-  <div
-    className="ml-2 p-2 border rounded cursor-pointer bg-[#f3f4f6] no-select"
-    onClick={() => setPriorIsOpen(!priorisOpen)}
-  >
-    {prior_options.find((opt) => opt.value === prior)?.label}
-  </div>
-
-  {/* Dropdown options */}
-  <div
-    className={`absolute top-[-10px] right-full flex-row-reverse bg-white border rounded shadow-lg z-100 space-x-2 px-2 py-2 ${
-      priorisOpen ? "dropdown-open" : "hidden"
-    }`}
-    style={{
-      whiteSpace: "nowrap",
-    }}
-  >
-{prior_options.map((opt, index) => (
-  <div
-    key={opt.value}
-    onClick={() => handlePriorChange(opt.value)}
-    className="px-4 py-2 mx-2 cursor-pointer text-white rounded hover:bg-green-600 option-animate no-select "
-    style={{
-      animationDelay: `${index * 200}ms`,
-      border: '1px solid grey', // Staggered animation
-      backgroundColor:
-        opt.value === '2' ? 'red' :
-        opt.value === '1' ? 'yellow' :
-        opt.value === '0' ? 'whitesmoke' : 'transparent', // Dynamic background color based on value
-    }}
-  >
-    
-  </div>
-))}
-
-  </div>
-</div>
-
-          {/* <select
+          <select
             value={prior}
             onChange={handlePriorChange}
             className="ml-2 p-2 border rounded cursor-pointer"
@@ -458,40 +408,46 @@ export default function MessagePage() {
             <option value="2">red</option>
             <option value="1">yellow</option>
             <option value="0">All</option>
+          </select>
+
+          {/* <select
+            value={selectedLanguage}
+            onChange={handleLanguageChange}
+            className="ml-2 p-2 border rounded cursor-pointer no-arrow"
+          >
+            <option  value="en">aA</option>
+            <option  value="hi">ह</option>
+            <option  value="ta">தெ</option>
+            <option  value="te">తె</option>
           </select> */}
-
           <div className="relative inline-block">
-  {/* Dropdown button */}
-  <div
-    className="ml-2 p-2 border rounded cursor-pointer bg-[#f3f4f6] no-select"
-    onClick={() => setIsOpen(!isOpen)}
-  >
-    {options.find((opt) => opt.value === selectedLanguage)?.label}
-  </div>
+            {/* Dropdown button */}
+            <div
+              className="ml-2 p-2 border rounded cursor-pointer bg-white"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {options.find((opt) => opt.value === selectedLanguage)?.label}
+            </div>
 
-  {/* Dropdown options */}
-  <div
-    className={`absolute top-[-10px] right-full flex-row-reverse bg-white border rounded shadow-lg z-100 space-x-2 px-2 py-2 ${
-      isOpen ? "dropdown-open" : "hidden"
-    }`}
-    style={{
-      whiteSpace: "nowrap",
-    }}
-  >
-    {options.map((opt, index) => (
-      <div
-        key={opt.value}
-        onClick={() => handleLanguageChange1(opt.value)}
-        className="px-4 py-2 mx-2 cursor-pointer bg-green-500 text-white rounded hover:bg-green-600 option-animate no-select"
-        style={{
-          animationDelay: `${index * 200}ms`, // Staggered animation
-        }}
-      >
-        {opt.label}
-      </div>
-    ))}
-  </div>
-</div>
+            {/* Dropdown options */}
+            <div
+              className={`absolute top-[-10px] right-full flex bg-white border rounded shadow-lg z-100 space-x-2 px-2 py-2 ${isOpen ? "block" : "hidden"
+                }`}
+              style={{
+                whiteSpace: "nowrap",
+              }}
+            >
+              {options.map((opt) => (
+                <div
+                  key={opt.value}
+                  onClick={() => handleLanguageChange1(opt.value)}
+                  className="px-4 py-2 cursor-pointer bg-green-500 text-white rounded hover:bg-green-600"
+                >
+                  {opt.label}
+                </div>
+              ))}
+            </div>
+          </div>
 
 
 
@@ -505,25 +461,14 @@ export default function MessagePage() {
       <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll scrollbar relative bg-slate-200 bg-opacity-50'>
 
         <div className='flex flex-col gap-2 py-2 mx-2' ref={currentMessage}>
-        {filteredMessages.length > 0 ? (
-  filteredMessages.map((msg, index) => (
-    <Message
-      key={index}
-      msg={msg}
-      userId={user._id}
-      onTranslate={translateMessage}
-    />
-  ))
-) : (
-  allMessage.map((msg, index) => (
-    <Message
-      key={index}
-      msg={msg}
-      userId={user._id}
-      onTranslate={translateMessage}
-    />
-  ))
-)}
+          {allMessage.map((msg, index) => (
+            <Message
+              key={index}
+              msg={msg}
+              userId={user._id}
+              onTranslate={translateMessage}
+            />
+          ))}
         </div>
 
         {message.imageUrl && (

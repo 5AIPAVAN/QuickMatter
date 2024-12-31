@@ -6,6 +6,7 @@ const userDetails = require('../controller/userDetails')
 const logout = require('../controller/logout')
 const updateUserDetails = require('../controller/updateUserDetails')
 const searchUser = require('../controller/searchUser')
+const scheduleMessage = require('../controller/scheduleMessage')
 
 const router = express.Router()
 
@@ -23,6 +24,10 @@ router.get('/logout',logout)
 router.post('/update-user',updateUserDetails)
 //search user
 router.post("/search-user",searchUser)
+
+// Schedule a message
+router.post('/schedule-message', scheduleMessage);
+
 
 
 module.exports = router

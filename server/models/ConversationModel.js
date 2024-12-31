@@ -13,6 +13,11 @@ const messageSchema = new mongoose.Schema({
         type : String,
         default : ""
     },
+    importance: {
+        type: Number,
+        enum: [0, 1, 2],  // Ensures the value is either 0, 1, or 2
+        default: 0  // Default value is 0
+    },    
     seen : {
         type : Boolean,
         default : false

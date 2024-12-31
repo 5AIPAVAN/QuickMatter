@@ -67,6 +67,8 @@ io.on('connection',async(socket)=>{
     //new message
     socket.on('new message',async(data)=>{
 
+        console.log("insocket");
+        console.log(data);
         //check conversation is available both user
 
         let conversation = await ConversationModel.findOne({
@@ -89,6 +91,7 @@ io.on('connection',async(socket)=>{
           text : data.text,
           imageUrl : data.imageUrl,
           videoUrl : data.videoUrl,
+          importance : data.importance,
           msgByUserId :  data?.msgByUserId,
         })
         const saveMessage = await message.save()
